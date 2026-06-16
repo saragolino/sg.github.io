@@ -11,9 +11,9 @@
     :root {
       --navy:  #102fb3;
       --white: #fdfaee;
-      --off:   #F5F5F3;
+      --off:   #f0ece0;
       --mid:   #6B7280;
-      --rule:  #E4E4E0;
+      --rule:  #e8e4d4;
       --red:   #DC2626;
     }
 
@@ -21,7 +21,7 @@
       font-family: 'Inter', sans-serif;
       font-weight: 300;
       background: var(--off);
-      color: #1a1a1a;
+      color: #0d1a3a;
       min-height: 100vh;
     }
 
@@ -121,7 +121,7 @@
       font-family: 'Inter', sans-serif;
       font-size: 0.875rem;
       font-weight: 300;
-      color: #1a1a1a;
+      color: #0d1a3a;
       background: var(--off);
       border: 1px solid var(--rule);
       border-radius: 2px;
@@ -325,7 +325,7 @@
     .output-content {
       font-size: 0.9rem;
       line-height: 1.75;
-      color: #333;
+      color: #0d1a3a;
       white-space: pre-wrap;
     }
 
@@ -569,7 +569,7 @@ AUDIENCE: ${audienceNote[audience]}
 Do not add a preamble. Start directly with the prioritised output. Be specific and decisive — a good prioritisation makes clear trade-offs, not a list where everything is important.`;
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('https://api-proxy-zeta-ten.vercel.app/api/proxy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
