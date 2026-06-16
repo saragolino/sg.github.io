@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Release Notes — Sara Golino</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:  #0D1F5C;
+      --white: #FFFFFF;
+      --off:   #F5F5F3;
+      --mid:   #6B7280;
+      --rule:  #E4E4E0;
+      --red:   #DC2626;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      background: var(--off);
+      color: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    nav {
+      background: var(--navy);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav a {
+      font-family: 'DM Serif Display', serif;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    nav span {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem;
+    }
+
+    .header { margin-bottom: 2.5rem; }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--navy);
+      margin-bottom: 0.75rem;
+      line-height: 1.15;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--mid);
+      max-width: 540px;
+      line-height: 1.65;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 1.5rem;
+    }
+
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .field-hint {
+      font-size: 0.78rem;
+      color: var(--mid);
+      margin-bottom: 0.65rem;
+      line-height: 1.5;
+    }
+
+    .field-group { margin-bottom: 1.5rem; }
+    .field-group:last-child { margin-bottom: 0; }
+
+    textarea, input[type="text"], select {
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: #1a1a1a;
+      background: var(--off);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      line-height: 1.6;
+    }
+
+    textarea:focus, input[type="text"]:focus, select:focus {
+      border-color: var(--navy);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    /* CHANGE ROWS */
+    .changes-header {
+      display: grid;
+      grid-template-columns: 110px 1fr 36px;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      padding: 0 0.25rem;
+    }
+
+    .col-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    .change-row {
+      display: grid;
+      grid-template-columns: 110px 1fr 36px;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      align-items: start;
+    }
+
+    .change-row select {
+      padding: 0.6rem 0.5rem;
+      font-size: 0.78rem;
+    }
+
+    .change-row textarea {
+      padding: 0.6rem 0.75rem;
+      resize: vertical;
+      min-height: 52px;
+    }
+
+    .btn-remove {
+      background: none;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      color: var(--mid);
+      cursor: pointer;
+      padding: 0.5rem;
+      font-size: 1rem;
+      line-height: 1;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .btn-remove:hover { border-color: var(--red); color: var(--red); }
+
+    .btn-add {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: none;
+      border: 1px dashed #ccc;
+      border-radius: 2px;
+      padding: 0.6rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--mid);
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .btn-add:hover { border-color: var(--navy); color: var(--navy); }
+
+    /* AUDIENCE PILLS */
+    .audience-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .audience-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: var(--off);
+      font-size: 0.8rem;
+      color: #444;
+      user-select: none;
+    }
+
+    .audience-pill:hover { border-color: var(--navy); }
+    .audience-pill.selected { border-color: var(--navy); background: #EEF2FF; color: var(--navy); font-weight: 500; }
+    .audience-pill input { display: none; }
+
+    .btn-run {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: 2px;
+      padding: 0.875rem 2rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-top: 1.5rem;
+    }
+
+    .btn-run:hover { opacity: 0.85; }
+    .btn-run:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .spinner {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .example-link {
+      font-size: 0.78rem;
+      color: var(--navy);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      margin-top: 0.75rem;
+      display: inline-block;
+    }
+
+    .error-msg {
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: 2px;
+      padding: 1rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--red);
+      margin-top: 1rem;
+      display: none;
+    }
+
+    /* OUTPUT TABS */
+    .output-card {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .output-header {
+      background: var(--navy);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .output-tabs {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .output-tab {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.6);
+      border-radius: 2px;
+      padding: 0.3rem 0.85rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .output-tab.active {
+      background: var(--white);
+      border-color: var(--white);
+      color: var(--navy);
+    }
+
+    .btn-copy {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.8);
+      border-radius: 2px;
+      padding: 0.35rem 0.9rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-copy:hover { border-color: white; color: white; }
+
+    .output-panels { }
+
+    .output-panel {
+      padding: 2rem;
+      display: none;
+    }
+
+    .output-panel.active { display: block; }
+
+    .output-content {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: #333;
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 600px) {
+      .two-col { grid-template-columns: 1fr; }
+      .changes-header { display: none; }
+      .change-row { grid-template-columns: 1fr 36px; grid-template-rows: auto auto; }
+      .change-row select { grid-column: 1; }
+      .change-row textarea { grid-column: 1; }
+      .change-row .btn-remove { grid-row: 1; grid-column: 2; }
+      .container { padding: 2rem 1.25rem 4rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .spinner { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">Sara Golino</a>
+  <span>Release Notes Writer</span>
+</nav>
+
+<div class="container">
+
+  <div class="header">
+    <p class="eyebrow">Prototype · Product Communication</p>
+    <h1>Release Notes Writer</h1>
+    <p class="subtitle">Describe what shipped — features, fixes, improvements — and get polished release notes written for your chosen audiences. One input, multiple versions.</p>
+  </div>
+
+  <!-- RELEASE INFO -->
+  <div class="card">
+    <p class="card-title">Release details</p>
+
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label" for="product-name">Product or app name</label>
+        <input type="text" id="product-name" placeholder="e.g. MyEnergy, Cost Planning, Artfinder" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="version">Version or release name <span style="font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></label>
+        <input type="text" id="version" placeholder="e.g. v2.4.1, June 2026 release, Summer update" />
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="context">Product context <span style="font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></label>
+      <p class="field-hint">Brief description of the product and its users — helps the AI write more accurately.</p>
+      <textarea id="context" rows="2" placeholder="e.g. A B2B SaaS dashboard for solar installers to manage proposals and customer journeys."></textarea>
+    </div>
+  </div>
+
+  <!-- CHANGES -->
+  <div class="card">
+    <p class="card-title">What shipped</p>
+    <div class="changes-header">
+      <span class="col-label">Type</span>
+      <span class="col-label">Description</span>
+      <span></span>
+    </div>
+    <div id="changeList"></div>
+    <button class="btn-add" onclick="addChange()">+ Add change</button>
+    <br/>
+    <span class="example-link" onclick="loadExample()">Load an example</span>
+  </div>
+
+  <!-- AUDIENCE & FORMAT -->
+  <div class="card">
+    <p class="card-title">Audience & format</p>
+
+    <div class="field-group">
+      <label class="field-label">Write notes for</label>
+      <p class="field-hint">Select one or more — you'll get a separate version for each.</p>
+      <div class="audience-grid">
+        <label class="audience-pill selected" onclick="toggleAudience(this)">
+          <input type="checkbox" value="end-users" checked />End users
+        </label>
+        <label class="audience-pill" onclick="toggleAudience(this)">
+          <input type="checkbox" value="internal-team" />Internal team
+        </label>
+        <label class="audience-pill" onclick="toggleAudience(this)">
+          <input type="checkbox" value="leadership" />Leadership / exec
+        </label>
+        <label class="audience-pill" onclick="toggleAudience(this)">
+          <input type="checkbox" value="technical" />Technical / engineers
+        </label>
+        <label class="audience-pill" onclick="toggleAudience(this)">
+          <input type="checkbox" value="support" />Customer support team
+        </label>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label" for="tone-select">Tone</label>
+        <select id="tone-select">
+          <option value="professional">Professional and clear</option>
+          <option value="friendly">Friendly and conversational</option>
+          <option value="minimal">Minimal — just the facts</option>
+          <option value="marketing">Marketing-forward — celebrate the wins</option>
+        </select>
+      </div>
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label" for="format-select">Format</label>
+        <select id="format-select">
+          <option value="bullets">Bullet points</option>
+          <option value="prose">Short prose paragraphs</option>
+          <option value="structured">Structured with headers per change type</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-run" id="runBtn" onclick="generateNotes()">
+      <span class="spinner" id="spinner"></span>
+      <span id="btnLabel">Generate release notes</span>
+    </button>
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="output-card" id="outputCard">
+    <div class="output-header">
+      <div class="output-tabs" id="outputTabs"></div>
+      <button class="btn-copy" onclick="copyActive()">Copy</button>
+    </div>
+    <div class="output-panels" id="outputPanels"></div>
+  </div>
+
+</div>
+
+<script>
+  let changeCount = 0;
+
+  function addChange(type = 'feature', desc = '') {
+    changeCount++;
+    const id = changeCount;
+    const div = document.createElement('div');
+    div.className = 'change-row';
+    div.id = `change-${id}`;
+    div.innerHTML = `
+      <select>
+        <option value="feature" ${type==='feature'?'selected':''}>✨ Feature</option>
+        <option value="improvement" ${type==='improvement'?'selected':''}>⚡ Improvement</option>
+        <option value="fix" ${type==='fix'?'selected':''}>🐛 Fix</option>
+        <option value="performance" ${type==='performance'?'selected':''}>🚀 Performance</option>
+        <option value="security" ${type==='security'?'selected':''}>🔒 Security</option>
+        <option value="removed" ${type==='removed'?'selected':''}>🗑 Removed</option>
+      </select>
+      <textarea placeholder="Describe what changed — be specific. Include who benefits and what problem it solves.">${desc}</textarea>
+      <button class="btn-remove" onclick="removeChange(${id})" title="Remove">×</button>
+    `;
+    document.getElementById('changeList').appendChild(div);
+  }
+
+  function removeChange(id) {
+    const el = document.getElementById(`change-${id}`);
+    if (el) el.remove();
+  }
+
+  function toggleAudience(label) {
+    const cb = label.querySelector('input');
+    cb.checked = !cb.checked;
+    label.classList.toggle('selected', cb.checked);
+  }
+
+  function loadExample() {
+    document.getElementById('changeList').innerHTML = '';
+    changeCount = 0;
+    document.getElementById('product-name').value = 'MyEnergy';
+    document.getElementById('version').value = 'v1.3 — June 2026';
+    document.getElementById('context').value = 'A B2C app that lets solar system owners monitor energy production, track savings, and manage their system from one place.';
+
+    const changes = [
+      ['feature', 'New: Battery storage view — customers can now see real-time battery charge level and estimated hours of backup power remaining alongside their solar production data.'],
+      ['feature', 'Export to CSV — users can now download their energy data for any date range as a CSV file, requested by multiple enterprise customers.'],
+      ['improvement', 'Dashboard load time reduced by 40% through caching improvements — data now loads in under 1 second on most connections.'],
+      ['improvement', 'Redesigned the alerts settings page — clearer labels, grouped by alert type, with a preview of what each alert looks like.'],
+      ['fix', 'Fixed a bug where the monthly savings figure was showing the wrong currency symbol for non-UK users.'],
+      ['fix', 'Fixed intermittent login failures affecting users who signed up via Google OAuth on iOS 17.'],
+    ];
+
+    changes.forEach(c => addChange(c[0], c[1]));
+  }
+
+  function getChanges() {
+    const rows = document.querySelectorAll('.change-row');
+    const changes = [];
+    rows.forEach(row => {
+      const type = row.querySelector('select').value;
+      const desc = row.querySelector('textarea').value.trim();
+      if (desc) changes.push({ type, desc });
+    });
+    return changes;
+  }
+
+  function getSelectedAudiences() {
+    return Array.from(document.querySelectorAll('.audience-pill input:checked')).map(cb => cb.value);
+  }
+
+  const audienceDescriptions = {
+    'end-users': 'End users of the product. Write in plain, benefit-focused language. No jargon. Focus on what they can do now that they couldn\'t before, or what works better. Warm, clear tone.',
+    'internal-team': 'The internal product and cross-functional team. Include context on what shipped, what was fixed, and any known limitations. Direct and factual.',
+    'leadership': 'Senior leadership or executives. Focus on business impact, key wins, and metrics where relevant. Brief and outcome-focused. No technical detail.',
+    'technical': 'Engineers and technical stakeholders. Include specifics: what changed technically, any edge cases, migration notes, or deprecations. Precise and complete.',
+    'support': 'The customer support team. Focus on what customers might ask about, what changed in user-facing flows, known issues to watch for, and how to explain changes to users.'
+  };
+
+  const audienceLabels = {
+    'end-users': 'End Users',
+    'internal-team': 'Internal Team',
+    'leadership': 'Leadership',
+    'technical': 'Technical',
+    'support': 'Support Team'
+  };
+
+  async function generateNotes() {
+    const changes = getChanges();
+    const audiences = getSelectedAudiences();
+    const productName = document.getElementById('product-name').value.trim();
+    const version = document.getElementById('version').value.trim();
+    const context = document.getElementById('context').value.trim();
+    const tone = document.getElementById('tone-select').value;
+    const format = document.getElementById('format-select').value;
+
+    if (changes.length === 0) {
+      showError('Add at least one change before generating.');
+      return;
+    }
+    if (audiences.length === 0) {
+      showError('Select at least one audience.');
+      return;
+    }
+
+    const btn = document.getElementById('runBtn');
+    const spinner = document.getElementById('spinner');
+    const btnLabel = document.getElementById('btnLabel');
+    const errorMsg = document.getElementById('errorMsg');
+    const outputCard = document.getElementById('outputCard');
+
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnLabel.textContent = 'Writing...';
+    errorMsg.style.display = 'none';
+    outputCard.style.display = 'none';
+    document.getElementById('outputTabs').innerHTML = '';
+    document.getElementById('outputPanels').innerHTML = '';
+
+    const toneInstructions = {
+      professional: 'Professional and clear. Confident, direct prose. No fluff.',
+      friendly: 'Friendly and conversational. Warm but not over-excited. Talk to the reader like a human.',
+      minimal: 'Minimal. Just the facts. No preamble, no sign-off, no filler sentences.',
+      marketing: 'Marketing-forward. Celebrate the wins. Lead with the benefit. Enthusiastic but not hyperbolic.'
+    };
+
+    const formatInstructions = {
+      bullets: 'Use bullet points for each change. Each bullet: one clear sentence.',
+      prose: 'Write in short prose paragraphs. Group related changes naturally.',
+      structured: 'Use headers to group changes by type (e.g. New Features, Improvements, Bug Fixes). Bullet points under each header.'
+    };
+
+    const changeList = changes.map(c => `[${c.type.toUpperCase()}] ${c.desc}`).join('\n');
+
+    const results = {};
+
+    try {
+      // Generate for each audience sequentially
+      for (const audience of audiences) {
+        const prompt = `Write release notes for the following product release.
+
+PRODUCT: ${productName || 'the product'}${version ? `\nVERSION: ${version}` : ''}${context ? `\nCONTEXT: ${context}` : ''}
+
+CHANGES:
+${changeList}
+
+AUDIENCE: ${audienceDescriptions[audience]}
+TONE: ${toneInstructions[tone]}
+FORMAT: ${formatInstructions[format]}
+
+Do not include a preamble or sign-off. Start directly with the release notes content. Do not repeat the version or product name as a header unless it adds value for this audience.`;
+
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-6',
+            max_tokens: 1000,
+            system: 'You are a senior product manager writing release notes. Your writing is specific, clear, and tailored to the audience. You never pad content or use filler phrases. Every sentence earns its place. You translate technical changes into clear benefits for non-technical audiences, and provide precise detail for technical ones.',
+            messages: [{ role: 'user', content: prompt }]
+          })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error?.message || 'Something went wrong.');
+
+        results[audience] = data.content?.find(b => b.type === 'text')?.text || '';
+      }
+
+      // Render tabs and panels
+      const tabs = document.getElementById('outputTabs');
+      const panels = document.getElementById('outputPanels');
+
+      audiences.forEach((aud, i) => {
+        const tab = document.createElement('button');
+        tab.className = `output-tab${i === 0 ? ' active' : ''}`;
+        tab.textContent = audienceLabels[aud];
+        tab.onclick = () => switchTab(aud, audiences);
+        tab.dataset.audience = aud;
+        tabs.appendChild(tab);
+
+        const panel = document.createElement('div');
+        panel.className = `output-panel${i === 0 ? ' active' : ''}`;
+        panel.dataset.audience = aud;
+        const content = document.createElement('div');
+        content.className = 'output-content';
+        content.textContent = results[aud];
+        panel.appendChild(content);
+        panels.appendChild(panel);
+      });
+
+      outputCard.style.display = 'block';
+      outputCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    } catch (err) {
+      showError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnLabel.textContent = 'Generate release notes';
+    }
+  }
+
+  function switchTab(audience, audiences) {
+    document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.output-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector(`.output-tab[data-audience="${audience}"]`).classList.add('active');
+    document.querySelector(`.output-panel[data-audience="${audience}"]`).classList.add('active');
+  }
+
+  function copyActive() {
+    const activePanel = document.querySelector('.output-panel.active .output-content');
+    if (activePanel) {
+      navigator.clipboard.writeText(activePanel.textContent).then(() => {
+        const btn = document.querySelector('.btn-copy');
+        btn.textContent = 'Copied';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+      });
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  // Init with 3 rows
+  addChange('feature');
+  addChange('improvement');
+  addChange('fix');
+</script>
+
+</body>
+</html>
