@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRD Generator — Sara Golino</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:  #0D1F5C;
+      --white: #FFFFFF;
+      --off:   #F5F5F3;
+      --mid:   #6B7280;
+      --rule:  #E4E4E0;
+      --red:   #DC2626;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      background: var(--off);
+      color: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    nav {
+      background: var(--navy);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav a {
+      font-family: 'DM Serif Display', serif;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    nav span {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem;
+    }
+
+    .header { margin-bottom: 2.5rem; }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--navy);
+      margin-bottom: 0.75rem;
+      line-height: 1.15;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--mid);
+      max-width: 540px;
+      line-height: 1.65;
+    }
+
+    /* PROGRESS STEPS */
+    .steps {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2rem;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      overflow: hidden;
+      background: var(--white);
+    }
+
+    .step {
+      flex: 1;
+      padding: 0.875rem 1rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-align: center;
+      border-right: 1px solid var(--rule);
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .step:last-child { border-right: none; }
+
+    .step.active {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .step.done {
+      color: var(--navy);
+      background: #EEF2FF;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+
+    .card.active { display: block; }
+
+    .card-title {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 1.5rem;
+    }
+
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .field-hint {
+      font-size: 0.78rem;
+      color: var(--mid);
+      margin-bottom: 0.65rem;
+      line-height: 1.5;
+    }
+
+    .field-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .field-group:last-child { margin-bottom: 0; }
+
+    textarea, input[type="text"], select {
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: #1a1a1a;
+      background: var(--off);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      line-height: 1.6;
+    }
+
+    textarea:focus, input[type="text"]:focus, select:focus {
+      border-color: var(--navy);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    /* CHECKBOX GRID */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: var(--off);
+    }
+
+    .checkbox-item:hover { border-color: var(--navy); }
+    .checkbox-item.checked { border-color: var(--navy); background: #EEF2FF; }
+
+    .checkbox-item input { display: none; }
+
+    .checkbox-item span {
+      font-size: 0.8rem;
+      color: #444;
+    }
+
+    .checkbox-item.checked span { color: var(--navy); font-weight: 500; }
+
+    /* NAV BUTTONS */
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+      border-radius: 2px;
+      padding: 0.75rem 1.75rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary { background: var(--navy); color: var(--white); }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-ghost {
+      background: none;
+      border: 1px solid var(--rule);
+      color: var(--mid);
+    }
+
+    .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+
+    .spinner {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .example-link {
+      font-size: 0.78rem;
+      color: var(--navy);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .error-msg {
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: 2px;
+      padding: 1rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--red);
+      margin-top: 1rem;
+      display: none;
+    }
+
+    /* OUTPUT */
+    .output-card {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .output-header {
+      background: var(--navy);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .output-header span {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .output-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-copy, .btn-restart {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.8);
+      border-radius: 2px;
+      padding: 0.35rem 0.9rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy:hover, .btn-restart:hover { border-color: white; color: white; }
+
+    .output-body { padding: 2rem; }
+
+    .output-content {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: #333;
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 600px) {
+      .two-col { grid-template-columns: 1fr; }
+      .steps { flex-direction: column; }
+      .step { border-right: none; border-bottom: 1px solid var(--rule); }
+      .step:last-child { border-bottom: none; }
+      .container { padding: 2rem 1.25rem 4rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .spinner { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">Sara Golino</a>
+  <span>PRD Generator</span>
+</nav>
+
+<div class="container">
+
+  <div class="header">
+    <p class="eyebrow">Prototype · Product Documentation</p>
+    <h1>PRD Generator</h1>
+    <p class="subtitle">Answer a few structured questions about your feature or initiative and get a ready-to-share Product Requirements Document — tailored to your team's format and level of detail.</p>
+  </div>
+
+  <!-- STEP INDICATOR -->
+  <div class="steps">
+    <div class="step active" id="step-tab-1">1 · Problem</div>
+    <div class="step" id="step-tab-2">2 · Solution</div>
+    <div class="step" id="step-tab-3">3 · Scope</div>
+    <div class="step" id="step-tab-4">4 · Format</div>
+  </div>
+
+  <!-- STEP 1: PROBLEM -->
+  <div class="card active" id="step-1">
+    <p class="card-title">Define the problem</p>
+
+    <div class="field-group">
+      <label class="field-label" for="feature-name">Feature or initiative name</label>
+      <input type="text" id="feature-name" placeholder="e.g. CSV Export, Onboarding Checklist, Notification Centre" />
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="problem">What problem does this solve?</label>
+      <p class="field-hint">Describe the user or business problem clearly. What's broken, missing, or painful right now?</p>
+      <textarea id="problem" rows="4" placeholder="e.g. Users can't export their data, so they resort to manual workarounds. This creates churn risk, especially among power users who need data portability."></textarea>
+    </div>
+
+    <div class="two-col">
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label" for="users">Who is affected?</label>
+        <p class="field-hint">Which users or segments experience this problem?</p>
+        <textarea id="users" rows="3" placeholder="e.g. Power users on the Pro plan, analysts who pull weekly reports"></textarea>
+      </div>
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label" for="evidence">Evidence or signals</label>
+        <p class="field-hint">What data, research, or feedback supports this?</p>
+        <textarea id="evidence" rows="3" placeholder="e.g. 3 churn interviews cited lack of export, 47 support tickets in Q2"></textarea>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <span class="example-link" onclick="loadExample()">Load an example</span>
+      <button class="btn btn-primary" onclick="goToStep(2)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: SOLUTION -->
+  <div class="card" id="step-2">
+    <p class="card-title">Describe the solution</p>
+
+    <div class="field-group">
+      <label class="field-label" for="solution">What are you building?</label>
+      <p class="field-hint">Describe the solution at a high level. What will users be able to do that they can't do now?</p>
+      <textarea id="solution" rows="4" placeholder="e.g. A CSV export button on every report view, allowing users to download filtered data with one click. Export jobs run asynchronously and users are notified by email when ready."></textarea>
+    </div>
+
+    <div class="two-col">
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label" for="goals">Success metrics</label>
+        <p class="field-hint">How will you know this worked?</p>
+        <textarea id="goals" rows="3" placeholder="e.g. 30% of Pro users export within 30 days of launch. Support tickets about data export drop by 50%."></textarea>
+      </div>
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label" for="constraints-prd">Constraints</label>
+        <p class="field-hint">Technical, legal, time, or resource limits.</p>
+        <textarea id="constraints-prd" rows="3" placeholder="e.g. Must not expose PII. No backend changes until security audit. Target: ship within 2 sprints."></textarea>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="goToStep(1)">← Back</button>
+      <button class="btn btn-primary" onclick="goToStep(3)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: SCOPE -->
+  <div class="card" id="step-3">
+    <p class="card-title">Define scope</p>
+
+    <div class="field-group">
+      <label class="field-label">What's in scope for this release?</label>
+      <p class="field-hint">Select the sections to include in the PRD.</p>
+      <div class="checkbox-grid" id="inScopeGrid">
+        <label class="checkbox-item checked"><input type="checkbox" value="user-stories" checked /><span>User stories</span></label>
+        <label class="checkbox-item checked"><input type="checkbox" value="acceptance-criteria" checked /><span>Acceptance criteria</span></label>
+        <label class="checkbox-item checked"><input type="checkbox" value="out-of-scope" checked /><span>Out of scope</span></label>
+        <label class="checkbox-item checked"><input type="checkbox" value="risks" checked /><span>Risks & open questions</span></label>
+        <label class="checkbox-item"><input type="checkbox" value="dependencies" /><span>Dependencies</span></label>
+        <label class="checkbox-item"><input type="checkbox" value="analytics" /><span>Analytics & instrumentation</span></label>
+        <label class="checkbox-item"><input type="checkbox" value="rollout" /><span>Rollout plan</span></label>
+        <label class="checkbox-item"><input type="checkbox" value="accessibility" /><span>Accessibility requirements</span></label>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="explicitly-out">Explicitly out of scope</label>
+      <p class="field-hint">What are you deliberately not doing in this version?</p>
+      <textarea id="explicitly-out" rows="3" placeholder="e.g. No Excel format in v1. No bulk export across multiple date ranges. No scheduling of exports."></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="goToStep(2)">← Back</button>
+      <button class="btn btn-primary" onclick="goToStep(4)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: FORMAT -->
+  <div class="card" id="step-4">
+    <p class="card-title">Output format</p>
+
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label" for="detail-level">Level of detail</label>
+        <p class="field-hint">How thorough should the PRD be?</p>
+        <select id="detail-level">
+          <option value="light">Light — one-pager, key points only</option>
+          <option value="standard" selected>Standard — full PRD with all selected sections</option>
+          <option value="detailed">Detailed — comprehensive, stakeholder-ready</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="tone">Tone</label>
+        <p class="field-hint">Who's the primary reader?</p>
+        <select id="tone">
+          <option value="team">Product & engineering team</option>
+          <option value="leadership">Senior leadership</option>
+          <option value="mixed">Mixed stakeholders</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="extra-context">Anything else to include? <span style="font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></label>
+      <textarea id="extra-context" rows="3" placeholder="e.g. Reference competitor feature X, flag dependency on the Auth team, note that design is already in progress"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="goToStep(3)">← Back</button>
+      <button class="btn btn-primary" id="runBtn" onclick="generatePRD()">
+        <span class="spinner" id="spinner"></span>
+        <span id="btnLabel">Generate PRD</span>
+      </button>
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="output-card" id="outputCard">
+    <div class="output-header">
+      <span>Generated PRD</span>
+      <div class="output-actions">
+        <button class="btn-restart" onclick="restart()">Start over</button>
+        <button class="btn-copy" onclick="copyOutput()">Copy</button>
+      </div>
+    </div>
+    <div class="output-body">
+      <div class="output-content" id="outputContent"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let currentStep = 1;
+
+  // Toggle checkbox items
+  document.querySelectorAll('.checkbox-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const cb = item.querySelector('input');
+      cb.checked = !cb.checked;
+      item.classList.toggle('checked', cb.checked);
+    });
+  });
+
+  function goToStep(n) {
+    document.getElementById(`step-${currentStep}`).classList.remove('active');
+    document.getElementById(`step-tab-${currentStep}`).classList.remove('active');
+    if (n > currentStep) {
+      document.getElementById(`step-tab-${currentStep}`).classList.add('done');
+    } else {
+      document.getElementById(`step-tab-${currentStep}`).classList.remove('done');
+    }
+    currentStep = n;
+    document.getElementById(`step-${currentStep}`).classList.add('active');
+    document.getElementById(`step-tab-${currentStep}`).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function getCheckedSections() {
+    return Array.from(document.querySelectorAll('#inScopeGrid input:checked')).map(cb => cb.value);
+  }
+
+  function loadExample() {
+    document.getElementById('feature-name').value = 'CSV Export';
+    document.getElementById('problem').value = "Users can't export their report data, so they resort to manual workarounds — copying tables into spreadsheets or asking the data team to pull raw SQL. This is a persistent friction point for power users and analysts, and has been cited in 3 churn interviews and 47 support tickets in Q2.";
+    document.getElementById('users').value = 'Pro plan users, particularly analysts and ops leads who pull weekly reports. Also affects enterprise trial accounts during evaluation.';
+    document.getElementById('evidence').value = '47 support tickets tagged "export" in Q2. 3 churned customer interviews cited missing export. NPS verbatim: "Just let me get my data out."';
+    document.getElementById('solution').value = 'Add a CSV export button to every report view. Exports are scoped to the user\'s current filters. Large exports run asynchronously — users receive an email with a download link when ready. v1 covers the 4 core report types only.';
+    document.getElementById('goals').value = '30% of Pro users export within 30 days of launch. Support tickets tagged "export" drop by 50% within 60 days. No increase in data-related GDPR requests.';
+    document.getElementById('constraints-prd').value = 'Must not expose PII in exported files. No backend architecture changes until security audit completes (end of month). Target: ship within 2 sprints.';
+    document.getElementById('explicitly-out').value = 'No Excel/PDF format in v1. No bulk export across date ranges. No scheduled or recurring exports. No export from the mobile app.';
+  }
+
+  async function generatePRD() {
+    const featureName = document.getElementById('feature-name').value.trim();
+    const problem = document.getElementById('problem').value.trim();
+    const users = document.getElementById('users').value.trim();
+    const evidence = document.getElementById('evidence').value.trim();
+    const solution = document.getElementById('solution').value.trim();
+    const goals = document.getElementById('goals').value.trim();
+    const constraintsPrd = document.getElementById('constraints-prd').value.trim();
+    const explicitlyOut = document.getElementById('explicitly-out').value.trim();
+    const sections = getCheckedSections();
+    const detailLevel = document.getElementById('detail-level').value;
+    const tone = document.getElementById('tone').value;
+    const extraContext = document.getElementById('extra-context').value.trim();
+
+    if (!featureName || !problem || !solution) {
+      showError('Please complete at least the feature name, problem, and solution before generating.');
+      return;
+    }
+
+    const btn = document.getElementById('runBtn');
+    const spinner = document.getElementById('spinner');
+    const btnLabel = document.getElementById('btnLabel');
+    const errorMsg = document.getElementById('errorMsg');
+    const outputCard = document.getElementById('outputCard');
+
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnLabel.textContent = 'Generating...';
+    errorMsg.style.display = 'none';
+    outputCard.style.display = 'none';
+
+    const sectionLabels = {
+      'user-stories': 'User Stories',
+      'acceptance-criteria': 'Acceptance Criteria',
+      'out-of-scope': 'Out of Scope',
+      'risks': 'Risks & Open Questions',
+      'dependencies': 'Dependencies',
+      'analytics': 'Analytics & Instrumentation',
+      'rollout': 'Rollout Plan',
+      'accessibility': 'Accessibility Requirements'
+    };
+
+    const sectionList = sections.map(s => sectionLabels[s]).join(', ');
+
+    const detailInstructions = {
+      light: 'Write a concise one-pager. Each section should be brief — 2-4 bullet points or short sentences. Total length: under 400 words.',
+      standard: 'Write a full PRD. Each section should be thorough but not padded. Use bullet points where appropriate. Total length: 500-900 words.',
+      detailed: 'Write a comprehensive, stakeholder-ready PRD. Each section should be detailed with full context and reasoning. Total length: 900-1400 words.'
+    };
+
+    const toneInstructions = {
+      team: 'Write for a product and engineering team. Be specific, direct, and use PM/eng language. Prioritise clarity over polish.',
+      leadership: 'Write for senior leadership. Lead with outcomes and business impact. Keep technical detail light. The business case should be immediately clear.',
+      mixed: 'Write for a mixed audience including non-technical stakeholders. Be clear and outcome-focused. Explain trade-offs without jargon.'
+    };
+
+    const userPrompt = `Generate a PRD for the following feature.
+
+FEATURE: ${featureName}
+PROBLEM: ${problem}
+${users ? `AFFECTED USERS: ${users}` : ''}
+${evidence ? `EVIDENCE: ${evidence}` : ''}
+SOLUTION: ${solution}
+${goals ? `SUCCESS METRICS: ${goals}` : ''}
+${constraintsPrd ? `CONSTRAINTS: ${constraintsPrd}` : ''}
+${explicitlyOut ? `EXPLICITLY OUT OF SCOPE: ${explicitlyOut}` : ''}
+${extraContext ? `ADDITIONAL CONTEXT: ${extraContext}` : ''}
+
+SECTIONS TO INCLUDE: ${sectionList}
+
+DETAIL LEVEL: ${detailInstructions[detailLevel]}
+TONE: ${toneInstructions[tone]}
+
+Start with a brief executive summary (2-3 sentences). Then cover each requested section clearly labelled. Do not add a preamble. Do not include sections not listed above. Be specific, not generic.`;
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1000,
+          system: 'You are a senior product manager writing clear, specific, actionable PRDs. Your writing is direct and structured. You do not pad sections or use filler phrases. Every sentence earns its place. You write PRDs that engineers can actually build from and stakeholders can actually understand.',
+          messages: [{ role: 'user', content: userPrompt }]
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error?.message || 'Something went wrong.');
+
+      const text = data.content?.find(b => b.type === 'text')?.text || '';
+      document.getElementById('outputContent').textContent = text;
+      outputCard.style.display = 'block';
+      outputCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    } catch (err) {
+      showError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnLabel.textContent = 'Generate PRD';
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function copyOutput() {
+    const text = document.getElementById('outputContent').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.btn-copy');
+      btn.textContent = 'Copied';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+
+  function restart() {
+    document.getElementById('outputCard').style.display = 'none';
+    goToStep(1);
+  }
+</script>
+
+</body>
+</html>
