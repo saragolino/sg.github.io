@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feature Prioritisation — Sara Golino</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:  #0D1F5C;
+      --white: #FFFFFF;
+      --off:   #F5F5F3;
+      --mid:   #6B7280;
+      --rule:  #E4E4E0;
+      --red:   #DC2626;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      background: var(--off);
+      color: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    nav {
+      background: var(--navy);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav a {
+      font-family: 'DM Serif Display', serif;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    nav span {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem;
+    }
+
+    .header { margin-bottom: 2.5rem; }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--navy);
+      margin-bottom: 0.75rem;
+      line-height: 1.15;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--mid);
+      max-width: 560px;
+      line-height: 1.65;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 1.5rem;
+    }
+
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .field-hint {
+      font-size: 0.78rem;
+      color: var(--mid);
+      margin-bottom: 0.65rem;
+      line-height: 1.5;
+    }
+
+    textarea, input[type="text"], select {
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: #1a1a1a;
+      background: var(--off);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      line-height: 1.6;
+    }
+
+    textarea:focus, input[type="text"]:focus, select:focus {
+      border-color: var(--navy);
+    }
+
+    /* FEATURE ROWS */
+    .features-header {
+      display: grid;
+      grid-template-columns: 1fr 100px 100px 100px 36px;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      padding: 0 0.25rem;
+    }
+
+    .col-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    .feature-row {
+      display: grid;
+      grid-template-columns: 1fr 100px 100px 100px 36px;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      align-items: center;
+    }
+
+    .feature-row input[type="text"] {
+      padding: 0.6rem 0.75rem;
+    }
+
+    .feature-row select {
+      padding: 0.6rem 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .btn-remove {
+      background: none;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      color: var(--mid);
+      cursor: pointer;
+      padding: 0.5rem;
+      font-size: 1rem;
+      line-height: 1;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-remove:hover { border-color: var(--red); color: var(--red); }
+
+    .btn-add {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: none;
+      border: 1px dashed #ccc;
+      border-radius: 2px;
+      padding: 0.6rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--mid);
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: all 0.2s;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-add:hover { border-color: var(--navy); color: var(--navy); }
+
+    .context-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .field-group { display: flex; flex-direction: column; }
+
+    .framework-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-run {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: 2px;
+      padding: 0.875rem 2rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-top: 1.5rem;
+    }
+
+    .btn-run:hover { opacity: 0.85; }
+    .btn-run:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .spinner {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .example-link {
+      font-size: 0.78rem;
+      color: var(--navy);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      margin-top: 1rem;
+      display: inline-block;
+    }
+
+    .error-msg {
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: 2px;
+      padding: 1rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--red);
+      margin-top: 1rem;
+      display: none;
+    }
+
+    /* OUTPUT */
+    .output-card {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .output-header {
+      background: var(--navy);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .output-header span {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .btn-copy {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.8);
+      border-radius: 2px;
+      padding: 0.35rem 0.9rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy:hover { border-color: white; color: white; }
+
+    .output-body {
+      padding: 2rem;
+    }
+
+    .output-content {
+      font-size: 0.9rem;
+      line-height: 1.75;
+      color: #333;
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 640px) {
+      .features-header { display: none; }
+      .feature-row {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+      .feature-row input[type="text"] { grid-column: 1 / -1; }
+      .context-grid, .framework-row { grid-template-columns: 1fr; }
+      .container { padding: 2rem 1.25rem 4rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .spinner { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">Sara Golino</a>
+  <span>Feature Prioritisation</span>
+</nav>
+
+<div class="container">
+
+  <div class="header">
+    <p class="eyebrow">Prototype · Product Strategy</p>
+    <h1>Feature Prioritisation Helper</h1>
+    <p class="subtitle">Add your features, score them on impact, effort, and confidence, then get a structured prioritisation with reasoning — ready to share with stakeholders or drop into a roadmap.</p>
+  </div>
+
+  <!-- CONTEXT -->
+  <div class="card">
+    <p class="card-title">Context</p>
+    <div class="context-grid">
+      <div class="field-group">
+        <label class="field-label" for="product">Product or team</label>
+        <p class="field-hint">What product or area is this prioritisation for?</p>
+        <input type="text" id="product" placeholder="e.g. Mobile onboarding flow, Q3 roadmap" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="goal">Strategic goal</label>
+        <p class="field-hint">What outcome are you trying to drive right now?</p>
+        <input type="text" id="goal" placeholder="e.g. Reduce time-to-first-value, improve retention" />
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="constraints">Constraints <span style="font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></label>
+      <p class="field-hint">Anything the model should factor in — team size, time, dependencies, things that are off-limits.</p>
+      <textarea id="constraints" rows="2" placeholder="e.g. 2-week sprint, 3 engineers, no changes to the payments flow until audit is complete"></textarea>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="card">
+    <p class="card-title">Features</p>
+    <div class="features-header">
+      <span class="col-label">Feature</span>
+      <span class="col-label">Impact</span>
+      <span class="col-label">Effort</span>
+      <span class="col-label">Confidence</span>
+      <span></span>
+    </div>
+    <div id="featureList"></div>
+    <button class="btn-add" onclick="addRow()">+ Add feature</button>
+    <br/>
+    <span class="example-link" onclick="loadExample()">Load an example</span>
+  </div>
+
+  <!-- FRAMEWORK -->
+  <div class="card">
+    <p class="card-title">Output options</p>
+    <div class="framework-row">
+      <div class="field-group">
+        <label class="field-label" for="framework">Prioritisation framework</label>
+        <p class="field-hint">How should features be ranked?</p>
+        <select id="framework">
+          <option value="rice">RICE (Reach, Impact, Confidence, Effort)</option>
+          <option value="moscow">MoSCoW (Must / Should / Could / Won't)</option>
+          <option value="value-effort">Value vs Effort matrix</option>
+          <option value="narrative">Narrative reasoning (no scoring)</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="audience">Audience</label>
+        <p class="field-hint">Who will read this output?</p>
+        <select id="audience">
+          <option value="team">Product team</option>
+          <option value="leadership">Senior leadership</option>
+          <option value="stakeholders">Mixed stakeholders</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-run" id="runBtn" onclick="prioritise()">
+      <span class="spinner" id="spinner"></span>
+      <span id="btnLabel">Prioritise features</span>
+    </button>
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="output-card" id="outputCard">
+    <div class="output-header">
+      <span>Prioritised output</span>
+      <button class="btn-copy" onclick="copyOutput()">Copy</button>
+    </div>
+    <div class="output-body">
+      <div class="output-content" id="outputContent"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let rowCount = 0;
+
+  function addRow(name = '', impact = 'medium', effort = 'medium', confidence = 'high') {
+    rowCount++;
+    const id = rowCount;
+    const div = document.createElement('div');
+    div.className = 'feature-row';
+    div.id = `row-${id}`;
+    div.innerHTML = `
+      <input type="text" placeholder="e.g. Add CSV export to dashboard" value="${name}" />
+      <select>
+        <option value="high" ${impact==='high'?'selected':''}>High</option>
+        <option value="medium" ${impact==='medium'?'selected':''}>Medium</option>
+        <option value="low" ${impact==='low'?'selected':''}>Low</option>
+      </select>
+      <select>
+        <option value="low" ${effort==='low'?'selected':''}>Low</option>
+        <option value="medium" ${effort==='medium'?'selected':''}>Medium</option>
+        <option value="high" ${effort==='high'?'selected':''}>High</option>
+      </select>
+      <select>
+        <option value="high" ${confidence==='high'?'selected':''}>High</option>
+        <option value="medium" ${confidence==='medium'?'selected':''}>Medium</option>
+        <option value="low" ${confidence==='low'?'selected':''}>Low</option>
+      </select>
+      <button class="btn-remove" onclick="removeRow(${id})" title="Remove">×</button>
+    `;
+    document.getElementById('featureList').appendChild(div);
+  }
+
+  function removeRow(id) {
+    const el = document.getElementById(`row-${id}`);
+    if (el) el.remove();
+  }
+
+  function loadExample() {
+    document.getElementById('featureList').innerHTML = '';
+    rowCount = 0;
+    document.getElementById('product').value = 'B2B analytics dashboard';
+    document.getElementById('goal').value = 'Improve retention and reduce churn among SMB customers';
+    document.getElementById('constraints').value = '3-week sprint, 4 engineers available, no backend changes until security audit completes end of month';
+
+    const features = [
+      ['CSV export for all report types', 'high', 'medium', 'high'],
+      ['Scheduled email reports', 'high', 'high', 'medium'],
+      ['In-app onboarding checklist for new users', 'medium', 'low', 'high'],
+      ['Custom dashboard layouts (drag and drop)', 'medium', 'high', 'low'],
+      ['Slack notifications for threshold alerts', 'medium', 'medium', 'medium'],
+      ['Dark mode', 'low', 'medium', 'high'],
+    ];
+
+    features.forEach(f => addRow(...f));
+  }
+
+  function getFeatures() {
+    const rows = document.querySelectorAll('.feature-row');
+    const features = [];
+    rows.forEach(row => {
+      const inputs = row.querySelectorAll('input, select');
+      const name = inputs[0].value.trim();
+      if (name) {
+        features.push({
+          name,
+          impact: inputs[1].value,
+          effort: inputs[2].value,
+          confidence: inputs[3].value
+        });
+      }
+    });
+    return features;
+  }
+
+  async function prioritise() {
+    const features = getFeatures();
+    const product = document.getElementById('product').value.trim();
+    const goal = document.getElementById('goal').value.trim();
+    const constraints = document.getElementById('constraints').value.trim();
+    const framework = document.getElementById('framework').value;
+    const audience = document.getElementById('audience').value;
+
+    if (features.length < 2) {
+      showError('Add at least 2 features to prioritise.');
+      return;
+    }
+
+    const btn = document.getElementById('runBtn');
+    const spinner = document.getElementById('spinner');
+    const btnLabel = document.getElementById('btnLabel');
+    const errorMsg = document.getElementById('errorMsg');
+    const outputCard = document.getElementById('outputCard');
+
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnLabel.textContent = 'Prioritising...';
+    errorMsg.style.display = 'none';
+    outputCard.style.display = 'none';
+
+    const frameworkInstructions = {
+      rice: 'Use the RICE framework. Infer Reach from context. Score each feature and produce a ranked list with RICE scores and brief reasoning.',
+      moscow: 'Categorise each feature as Must Have, Should Have, Could Have, or Won\'t Have for this cycle. Explain each placement in one sentence.',
+      'value-effort': 'Place each feature into a Value vs Effort matrix (Quick Wins / Big Bets / Fill-ins / Time Sinks). Explain the placement and recommended action for each.',
+      narrative: 'Produce a narrative prioritisation without formal scoring. Explain the recommended order, the trade-offs being made, and what the team should focus on first and why.'
+    };
+
+    const audienceNote = {
+      team: 'Write for a product team — be specific, reference trade-offs, use PM language.',
+      leadership: 'Write for senior leadership — lead with outcomes and business impact, keep technical detail minimal.',
+      stakeholders: 'Write for a mixed audience — be clear and outcome-focused, explain trade-offs without jargon.'
+    };
+
+    const featureList = features.map(f =>
+      `- ${f.name} | Impact: ${f.impact} | Effort: ${f.effort} | Confidence: ${f.confidence}`
+    ).join('\n');
+
+    const userPrompt = `${product ? `PRODUCT: ${product}\n` : ''}${goal ? `STRATEGIC GOAL: ${goal}\n` : ''}${constraints ? `CONSTRAINTS: ${constraints}\n` : ''}
+FEATURES TO PRIORITISE:
+${featureList}
+
+FRAMEWORK: ${frameworkInstructions[framework]}
+
+AUDIENCE: ${audienceNote[audience]}
+
+Do not add a preamble. Start directly with the prioritised output. Be specific and decisive — a good prioritisation makes clear trade-offs, not a list where everything is important.`;
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1000,
+          system: 'You are a senior product manager helping prioritise a feature backlog. Your output is structured, opinionated, and actionable. You make clear trade-offs and give direct recommendations. You do not hedge or qualify everything.',
+          messages: [{ role: 'user', content: userPrompt }]
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error?.message || 'Something went wrong.');
+
+      const text = data.content?.find(b => b.type === 'text')?.text || '';
+      document.getElementById('outputContent').textContent = text;
+      outputCard.style.display = 'block';
+      outputCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    } catch (err) {
+      showError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnLabel.textContent = 'Prioritise features';
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function copyOutput() {
+    const text = document.getElementById('outputContent').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.btn-copy');
+      btn.textContent = 'Copied';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+
+  // Initialise with 3 empty rows
+  addRow(); addRow(); addRow();
+</script>
+
+</body>
+</html>
